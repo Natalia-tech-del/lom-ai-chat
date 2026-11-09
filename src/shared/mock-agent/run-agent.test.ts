@@ -4,18 +4,18 @@ import { runAgent } from './run-agent'
 import type { TAgentEvent, TAgentMessage } from './types'
 
 const collect = async (history: TAgentMessage[]): Promise<TAgentEvent[]> => {
-    const events: TAgentEvent[] = []
-    const controller = new AbortController()
-    const running = (async () => {
-      for await (const event of runAgent(history, controller.signal)) {
-        events.push(event)
-      }
-    })()
-  
-    await vi.runAllTimersAsync()
-    await running
-    return events
-  }
+  const events: TAgentEvent[] = []
+  const controller = new AbortController()
+  const running = (async () => {
+    for await (const event of runAgent(history, controller.signal)) {
+      events.push(event)
+    }
+  })()
+
+  await vi.runAllTimersAsync()
+  await running
+  return events
+}
 
 const joinedText = (events: TAgentEvent[]) =>
   events
