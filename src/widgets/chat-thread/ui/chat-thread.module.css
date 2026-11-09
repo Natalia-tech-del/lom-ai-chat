@@ -1,0 +1,29 @@
+.scroll {
+  flex: 1;
+  min-height: 0;
+}
+
+.empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.user {
+  margin-left: auto;
+  max-width: min(72%, 36rem);
+  background: var(--mantine-color-indigo-6);
+  color: white;
+}
+
+.assistant {
+  margin-right: auto;
+  max-width: min(72%, 36rem);
+}
+
+.text {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
