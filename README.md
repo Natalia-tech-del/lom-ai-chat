@@ -6,6 +6,8 @@
 
 Короткая запись экрана: [посмотреть видео](https://drive.google.com/file/d/1IcsoRFs0UaIngAGJqDCzEp3OaQq0cWa5/view?usp=sharing).
 
+Деплой: https://natalia-tech-del.github.io/lom-ai-chat/
+
 ## Возможности
 
 - Отправка сообщений и продолжение диалога с учётом предыдущей истории.

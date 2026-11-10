@@ -4,6 +4,7 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [react()],
+  base: '/lom-ai-chat/',
   resolve: {
     alias: {
       '@app': path.resolve(import.meta.dirname, './src/app'),
