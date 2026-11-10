@@ -34,6 +34,7 @@ type TConversationStore = {
   startAssistantMessage: (conversationId: string) => string
   appendAssistantText: (conversationId: string, messageId: string, chunk: string) => void
   setMessageStatus: (conversationId: string, messageId: string, status: TMessageStatus) => void
+  resetAssistantMessage: (conversationId: string, messageId: string) => void
   setActiveRun: (conversationId: string, activeRun: TActiveRun | null) => void
 }
 
@@ -135,7 +136,20 @@ export const useConversationStore = create<TConversationStore>()(
           })),
         })
       },
-
+      // перед повтором очищает текст ответа и ставит pending
+      resetAssistantMessage: (conversationId, messageId) => {
+        set({
+          conversations: patchConversation(get().conversations, conversationId, (conversation) => ({
+            ...conversation,
+            messages: conversation.messages.map((message) =>
+              message.id === messageId
+                ? { ...message, text: '', status: 'pending' as const }
+                : message,
+            ),
+            updatedAt: Date.now(),
+          })),
+        })
+      },
       // обновляет состояние выполнения агента внутри конкретного диалога
       setActiveRun: (conversationId, activeRun) => {
         set({
@@ -157,24 +171,30 @@ export const useConversationStore = create<TConversationStore>()(
           activeRun: null,
         })),
       }),
-      // Обработка состояния после восстановления Store из localStorage
-      onRehydrateStorage: () => (state) => {
-        if (!state) {
-          return
+      merge: (persistedState, currentState) => {
+        const persisted = persistedState as {
+          activeConversationId?: string | null
+          conversations?: TConversation[]
+        } | null
+
+        if (!persisted) {
+          return currentState
         }
 
-        useConversationStore.setState({
-          conversations: state.conversations.map((conversation) => ({
+        return {
+          ...currentState,
+          activeConversationId: persisted.activeConversationId ?? currentState.activeConversationId,
+          conversations: (persisted.conversations ?? []).map((conversation) => ({
             ...conversation,
             activeRun: null,
             messages: conversation.messages.map((message) =>
               message.role === 'assistant' &&
               (message.status === 'pending' || message.status === 'streaming')
-                ? { ...message, status: 'stopped' }
+                ? { ...message, status: 'stopped' as const }
                 : message,
             ),
           })),
-        })
+        }
       },
     },
   ),
