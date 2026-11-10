@@ -1,4 +1,4 @@
-import { Button, NavLink, ScrollArea, Stack, Text } from '@mantine/core'
+import { Button, Loader, NavLink, ScrollArea, Stack, Text } from '@mantine/core'
 import { Plus } from 'lucide-react'
 import { useConversationStore } from '@entities/conversation'
 
@@ -35,6 +35,7 @@ export const ConversationList = ({ onSelect }: TConversationListProps) => {
               key={conversation.id}
               label={conversation.title}
               active={conversation.id === activeId}
+              rightSection={conversation.activeRun ? <Loader size="xs" /> : undefined}
               onClick={() => {
                 selectConversation(conversation.id)
                 onSelect?.()

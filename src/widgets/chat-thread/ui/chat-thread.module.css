@@ -14,8 +14,6 @@
 .user {
   margin-left: auto;
   max-width: min(72%, 36rem);
-  background: var(--mantine-color-indigo-6);
-  color: white;
 }
 
 .assistant {
